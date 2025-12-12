@@ -4,4 +4,9 @@ kind: Kustomization
 resources:
   - console-crd.yaml
   - topic-crd.yaml
+  - user-crd.yaml
+  - redpandarole-crd.yaml
+  - schema-crd.yaml
+  - redpanda-crd.yaml
+  - cluster-crd.yaml
 

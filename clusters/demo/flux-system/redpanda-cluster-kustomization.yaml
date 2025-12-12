@@ -12,5 +12,5 @@ spec:
   sourceRef:
     kind: GitRepository
     name: integration-platform
-  timeout: 5m
+  timeout: 10m
 

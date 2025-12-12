@@ -1,0 +1,33 @@
+# Kubernetes
+*.kubeconfig
+*.yaml.bak
+*.yaml.orig
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+.env
+.env.local
+
+# k3d
+k3d-*.yaml
+
+# Flux
+.flux/
+
+# Build artifacts
+dist/
+build/
+*.tar.gz
+

@@ -23,8 +23,6 @@ spec:
         namespace: redpanda-system
       version: ">=2.5.0"
   values:
-    extraArgs:
-      - --enable-console=false
     resources:
       requests:
         cpu: 100m

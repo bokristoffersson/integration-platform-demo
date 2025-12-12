@@ -60,7 +60,9 @@ Before running this demo, ensure you have the following tools installed on your 
 
 Follow these steps to run the demo on your local computer:
 
-1. **Clone the repository** (if you haven't already):
+1. **Fork and clone the repository**:
+   - **Important**: You need to fork this repository to your own GitHub account because Flux needs write access to commit Flux system manifests back to the repository during bootstrap.
+   - Fork the repository on GitHub, then clone your fork:
    ```bash
    git clone https://github.com/YOUR_USERNAME/integration-platform.git
    cd integration-platform
@@ -83,9 +85,10 @@ Follow these steps to run the demo on your local computer:
 
 4. **Bootstrap Flux**:
    ```bash
+   export GITHUB_USER=your-github-username
    ./scripts/bootstrap-flux.sh
    ```
-   This will install Flux CD in your cluster and configure GitOps.
+   This will install Flux CD in your cluster and configure GitOps. Flux will commit its system manifests to your repository, so make sure you're using your own fork (see step 1).
 
 5. **Verify installation**:
    ```bash
@@ -236,8 +239,11 @@ In addition to the tools listed in the [Quick Start](#quick-start) section, you'
 
 7. **Bootstrap Flux**:
    ```bash
+   export GITHUB_USER=your-github-username
    ./scripts/bootstrap-flux.sh
    ```
+   
+   **Important**: Make sure you've forked the repository to your own GitHub account (see step 1 in Quick Start), as Flux needs write access to commit Flux system manifests back to the repository during bootstrap.
    
    Note: If you're using a private Git repository, you may need to configure Flux with SSH keys or a personal access token.
 

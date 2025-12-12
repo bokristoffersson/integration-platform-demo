@@ -1,0 +1,41 @@
+apiVersion: redpanda.vectorized.io/v1alpha1
+kind: Cluster
+metadata:
+  name: redpanda
+  namespace: infrastructure
+spec:
+  image: docker.redpanda.com/vectorized/redpanda:v23.2.0
+  replicas: 3
+  resources:
+    requests:
+      cpu: 1
+      memory: 2Gi
+    limits:
+      cpu: 2
+      memory: 4Gi
+  configuration:
+    kafkaApi:
+      - port: 9092
+        tls:
+          enabled: false
+    adminApi:
+      - port: 9644
+        tls:
+          enabled: false
+    pandaproxyApi:
+      - port: 8082
+        tls:
+          enabled: false
+    schemaRegistry:
+      port: 8081
+      tls:
+        enabled: false
+    rpcServer:
+      port: 33145
+    developerMode: true
+  storage:
+    persistentVolume:
+      enabled: true
+      size: 10Gi
+      storageClassName: local-path
+

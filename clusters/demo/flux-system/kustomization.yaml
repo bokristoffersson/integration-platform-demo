@@ -5,4 +5,6 @@ resources:
   - gotk-components.yaml
   - gitrepository.yaml
   - infrastructure-kustomization.yaml
+  - redpanda-operator-kustomization.yaml
+  - redpanda-cluster-kustomization.yaml
 

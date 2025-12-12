@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - operator.yaml
+  - rbac.yaml
   - cluster.yaml
   - console.yaml

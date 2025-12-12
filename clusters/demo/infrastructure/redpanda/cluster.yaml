@@ -4,7 +4,7 @@ metadata:
   name: redpanda
   namespace: infrastructure
 spec:
-  image: docker.redpanda.com/vectorized/redpanda:v25.3.2
+  image: docker.redpanda.com/redpandadata/redpanda:latest
   replicas: 3
   resources:
     requests:

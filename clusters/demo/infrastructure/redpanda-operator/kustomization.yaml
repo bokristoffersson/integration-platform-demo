@@ -4,4 +4,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - operator.yaml
+  - cert-manager-ns.yaml
+  - cert-manager-repo.yaml
+  - cert-manager-release.yaml
 

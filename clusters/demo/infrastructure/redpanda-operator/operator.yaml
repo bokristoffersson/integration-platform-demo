@@ -1,36 +1,34 @@
-apiVersion: source.toolkit.fluxcd.io/v1
+apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: redpanda
-  namespace: redpanda-system
+  namespace: redpanda
 spec:
-  interval: 1h
-  url: https://charts.redpanda.com
+  interval: 5m0s
+  url: https://charts.redpanda.com/
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: redpanda-operator
-  namespace: redpanda-system
+  name: redpanda
+  namespace: redpanda
 spec:
-  interval: 15m
+  dependsOn:
+    - name: cert-manager
+      namespace: cert-manager
+  interval: 5m
   chart:
     spec:
-      chart: operator
+      chart: redpanda
+      version: "5.7.*"
       sourceRef:
         kind: HelmRepository
         name: redpanda
-        namespace: redpanda-system
-      version: "25.2.1"
+        namespace: redpanda
+      interval: 1m
   values:
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
-    # Enable vectorized controllers to watch clusters.redpanda.vectorized.io resources
-    additionalCmdFlags:
-      - --enable-vectorized-controllers=true
+    statefulset:
+      initContainers:
+        setDataDirOwnership:
+          enabled: true
 

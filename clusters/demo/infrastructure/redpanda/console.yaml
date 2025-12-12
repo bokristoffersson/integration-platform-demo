@@ -1,0 +1,35 @@
+apiVersion: cluster.redpanda.com/v1alpha2
+kind: Console
+metadata:
+  name: redpanda-console
+  namespace: infrastructure
+spec:
+  deployment:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  config:
+    kafka:
+      brokers:
+        - redpanda.infrastructure.svc.cluster.local:9092
+    redpanda:
+      adminApi:
+        enabled: true
+        urls:
+          - http://redpanda.infrastructure.svc.cluster.local:9644
+    schemaRegistry:
+      enabled: true
+      urls:
+        - http://redpanda.infrastructure.svc.cluster.local:8081
+    connect:
+      enabled: false
+  server:
+    readOnly: false
+  enterprise:
+    licenseRef: ""
+

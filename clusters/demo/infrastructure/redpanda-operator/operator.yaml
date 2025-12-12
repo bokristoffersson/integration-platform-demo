@@ -21,7 +21,7 @@ spec:
         kind: HelmRepository
         name: redpanda
         namespace: redpanda-system
-      version: ">=2.5.0"
+      version: "25.3.2"
   values:
     resources:
       requests:

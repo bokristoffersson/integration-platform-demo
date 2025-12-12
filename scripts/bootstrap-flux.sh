@@ -28,19 +28,34 @@ if ! kubectl cluster-info &>/dev/null; then
     exit 1
 fi
 
+# Create flux-system namespace if it doesn't exist
+echo "📦 Creating flux-system namespace..."
+kubectl create namespace flux-system --dry-run=client -o yaml | kubectl apply -f -
+
 # Install Flux components
 echo "📦 Installing Flux components..."
 flux install \
     --components=source-controller,kustomize-controller,helm-controller,notification-controller \
-    --namespace=flux-system \
-    --create-namespace
+    --namespace=flux-system
 
 # Wait for Flux components to be ready
 echo "⏳ Waiting for Flux components to be ready..."
 kubectl wait --for=condition=ready pod \
-    -l app.kubernetes.io/part-of=flux \
+    -l app.kubernetes.io/name=source-controller \
     -n flux-system \
-    --timeout=300s
+    --timeout=300s || true
+kubectl wait --for=condition=ready pod \
+    -l app.kubernetes.io/name=kustomize-controller \
+    -n flux-system \
+    --timeout=300s || true
+kubectl wait --for=condition=ready pod \
+    -l app.kubernetes.io/name=helm-controller \
+    -n flux-system \
+    --timeout=300s || true
+kubectl wait --for=condition=ready pod \
+    -l app.kubernetes.io/name=notification-controller \
+    -n flux-system \
+    --timeout=300s || true
 
 # Apply Flux component manifests
 echo "📝 Applying Flux component manifests..."

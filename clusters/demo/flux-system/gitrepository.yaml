@@ -5,9 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  url: https://github.com/YOUR_USERNAME/integration-platform
+  url: https://github.com/bokristoffersson/integration-platform-demo
   ref:
     branch: main
-  secretRef:
-    name: integration-platform-credentials
 

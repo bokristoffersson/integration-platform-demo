@@ -61,8 +61,16 @@ kubectl wait --for=condition=ready pod \
 echo "📝 Applying Flux component manifests..."
 kubectl apply -f clusters/demo/flux-system/gotk-components.yaml
 
-# If GitHub credentials are provided, bootstrap with GitRepository
+# Update GitRepository URL if GITHUB_USER is provided
 if [ -n "${GITHUB_USER}" ]; then
+    echo "📝 Updating GitRepository URL with GITHUB_USER..."
+    GIT_REPO_URL="https://github.com/${GITHUB_USER}/${GITHUB_REPO}"
+    sed -i "s|url: https://github.com/YOUR_USERNAME/.*|url: ${GIT_REPO_URL}|" clusters/demo/flux-system/gitrepository.yaml
+    echo "✅ Updated GitRepository URL to: ${GIT_REPO_URL}"
+fi
+
+# If GitHub credentials are provided and not skipping bootstrap, bootstrap with GitRepository
+if [ -n "${GITHUB_USER}" ] && [ -z "${SKIP_FLUX_BOOTSTRAP:-}" ]; then
     echo "🔗 Bootstrapping with GitRepository..."
     flux bootstrap github \
         --owner="${GITHUB_USER}" \
@@ -71,11 +79,29 @@ if [ -n "${GITHUB_USER}" ]; then
         --path=clusters/demo \
         --personal
 else
-    echo "⚠️  GITHUB_USER not set. Skipping GitRepository bootstrap."
-    echo "   To bootstrap with Git, set GITHUB_USER and run:"
-    echo "   flux bootstrap github --owner=<user> --repository=${GITHUB_REPO} --path=clusters/demo"
+    if [ -z "${GITHUB_USER:-}" ]; then
+        echo "⚠️  GITHUB_USER not set."
+        echo ""
+        echo "   Option 1: Set GITHUB_USER and let Flux bootstrap automatically:"
+        echo "     export GITHUB_USER=your-github-username"
+        echo "     export GITHUB_REPO=integration-platform-demo  # optional, defaults to integration-platform"
+        echo "     ./scripts/bootstrap-flux.sh"
+        echo ""
+        echo "   Option 2: Manually update GitRepository URL:"
+        echo "     1. Edit clusters/demo/flux-system/gitrepository.yaml"
+        echo "     2. Replace YOUR_USERNAME with your GitHub username"
+        echo "     3. Replace integration-platform-demo with your repository name"
+        echo "     4. Apply: kubectl apply -f clusters/demo/flux-system/gitrepository.yaml"
+        echo ""
+    else
+        echo "📝 Skipping Flux bootstrap (SKIP_FLUX_BOOTSTRAP is set). Applying GitRepository manually..."
+    fi
     echo ""
-    echo "📝 Applying GitRepository manually..."
+    echo "📝 Applying GitRepository..."
+    if grep -q "YOUR_USERNAME" clusters/demo/flux-system/gitrepository.yaml; then
+        echo "❌ GitRepository still contains placeholder URL. Please set GITHUB_USER or update manually."
+        exit 1
+    fi
     kubectl apply -f clusters/demo/flux-system/gitrepository.yaml
 fi
 

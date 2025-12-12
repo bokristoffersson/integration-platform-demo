@@ -64,9 +64,10 @@ Follow these steps to run the demo on your local computer:
    - **Important**: You need to fork this repository to your own GitHub account because Flux needs write access to commit Flux system manifests back to the repository during bootstrap.
    - Fork the repository on GitHub, then clone your fork:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/integration-platform.git
-   cd integration-platform
+   git clone https://github.com/YOUR_USERNAME/integration-platform-demo.git
+   cd integration-platform-demo
    ```
+   (Replace `YOUR_USERNAME` with your GitHub username and `integration-platform-demo` with your actual repository name if different)
 
 2. **Make scripts executable**:
    ```bash
@@ -86,9 +87,15 @@ Follow these steps to run the demo on your local computer:
 4. **Bootstrap Flux**:
    ```bash
    export GITHUB_USER=your-github-username
+   export GITHUB_REPO=integration-platform-demo  # Optional: defaults to "integration-platform"
    ./scripts/bootstrap-flux.sh
    ```
-   This will install Flux CD in your cluster and configure GitOps. Flux will commit its system manifests to your repository, so make sure you're using your own fork (see step 1).
+   
+   **Important**: 
+   - Set `GITHUB_USER` to your GitHub username. The script will automatically configure the GitRepository URL.
+   - If your repository name differs from `integration-platform-demo`, set `GITHUB_REPO` as well.
+   - Flux will commit its system manifests to your repository, so make sure you're using your own fork (see step 1).
+   - If you don't set `GITHUB_USER`, you'll need to manually edit `clusters/demo/flux-system/gitrepository.yaml` and replace `YOUR_USERNAME` with your GitHub username before applying.
 
 5. **Verify installation**:
    ```bash

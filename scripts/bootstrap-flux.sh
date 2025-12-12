@@ -78,6 +78,12 @@ if [ -n "${GITHUB_USER}" ] && [ -z "${SKIP_FLUX_BOOTSTRAP:-}" ]; then
         --branch="${GITHUB_BRANCH}" \
         --path=clusters/demo \
         --personal
+    
+    # Apply infrastructure Kustomization if it exists
+    if [ -f "clusters/demo/flux-system/infrastructure-kustomization.yaml" ]; then
+        echo "📝 Applying infrastructure Kustomization..."
+        kubectl apply -f clusters/demo/flux-system/infrastructure-kustomization.yaml
+    fi
 else
     if [ -z "${GITHUB_USER:-}" ]; then
         echo "⚠️  GITHUB_USER not set."
@@ -103,6 +109,12 @@ else
         exit 1
     fi
     kubectl apply -f clusters/demo/flux-system/gitrepository.yaml
+    
+    # Apply infrastructure Kustomization if it exists
+    if [ -f "clusters/demo/flux-system/infrastructure-kustomization.yaml" ]; then
+        echo "📝 Applying infrastructure Kustomization..."
+        kubectl apply -f clusters/demo/flux-system/infrastructure-kustomization.yaml
+    fi
 fi
 
 # Verify Flux installation
